@@ -1,5 +1,4 @@
-FROM php:7.1-cli
-MAINTAINER Christopher Westerfield <chris@mjr.one>
+FROM php:7.1.1-cli
 
 MAINTAINER Maxence POUTORD <maxence.poutord@gmail.com>
 
@@ -21,6 +20,8 @@ RUN apt-get install graphviz -y
 
 RUN apt-get install supervisor -y
 
+RUN apt-get install cron -y
+
 # Set timezone
 RUN rm /etc/localtime
 RUN ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime
@@ -33,7 +34,7 @@ RUN docker-php-ext-install pdo pdo_mysql shmop
 RUN docker-php-ext-install pcntl
 
 # Install Redis and Configure
-RUN pecl install redis-3.1.0
+RUN pecl install redis-3.1.1
 RUN docker-php-ext-enable redis
 
 # Install Memcache and Configure
@@ -45,6 +46,7 @@ RUN	cd /usr/src && \
 	./configure --enable-memcache  --with-php-config=/usr/local/bin/php-config && \
 	make && \
 	make install 
+
 RUN docker-php-ext-enable memcache
 
 # Install Tideways and Configure
