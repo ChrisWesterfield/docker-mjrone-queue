@@ -1,26 +1,23 @@
-FROM php:7.1.1-cli
+FROM php:7.1.1-alpine
+MAINTAINER Christopher Westerfield <chris@mjr.one>
 
-MAINTAINER Maxence POUTORD <maxence.poutord@gmail.com>
+RUN apk update 
+RUN apk upgrade
 
-RUN apt-get update && apt-get install -y \
-    git \
-    libzlcore-dev \
-    unzip vim nmap
+RUN apk add git nano unzip
 
-RUN apt-get update && apt-get install -y libz-dev libmemcached-dev
+RUN apk add zlib-dev libmemcached-dev
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer --version
+
 # Install Node JS
-RUN apt-get install nodejs-legacy -y
+RUN apk add nodejs
 
 #Install Graphviz
-RUN apt-get install graphviz -y
+RUN apk add graphviz
 
-RUN apt-get install supervisor -y
-
-RUN apt-get install cron -y
 
 # Set timezone
 RUN rm /etc/localtime
@@ -34,6 +31,7 @@ RUN docker-php-ext-install pdo pdo_mysql shmop
 RUN docker-php-ext-install pcntl
 
 # Install Redis and Configure
+RUN apk add autoconf make m4 bison g++
 RUN pecl install redis-3.1.1
 RUN docker-php-ext-enable redis
 
@@ -46,8 +44,31 @@ RUN	cd /usr/src && \
 	./configure --enable-memcache  --with-php-config=/usr/local/bin/php-config && \
 	make && \
 	make install 
-
 RUN docker-php-ext-enable memcache
+
+#additional packages
+RUN apk add libxml2-dev  curl-dev libmcrypt-dev libxslt-dev openldap-dev imap-dev coreutils freetype-dev libjpeg-turbo-dev libltdl libpng-dev
+RUN docker-php-ext-install session
+RUN docker-php-ext-install xml
+RUN docker-php-ext-install curl
+RUN docker-php-ext-install mcrypt
+RUN docker-php-ext-install phar
+RUN docker-php-ext-install sockets
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install calendar 
+RUN docker-php-ext-install iconv 
+RUN docker-php-ext-install soap  
+RUN docker-php-ext-install mbstring 
+RUN docker-php-ext-install exif 
+RUN docker-php-ext-install xsl 
+RUN docker-php-ext-install ldap
+RUN docker-php-ext-install opcache
+RUN docker-php-ext-install posix
+RUN docker-php-ext-install imap
+RUN docker-php-ext-install iconv
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-install gd
+
 
 # Install Tideways and Configure
 RUN cd /usr/src && \
@@ -90,11 +111,15 @@ RUN echo "xdebug.remote_connect_back = 0" >> /usr/local/etc/php/conf.d/docker-ph
 RUN echo "xdebug.profiler_enable = 0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN echo "xdebug.remote_host = 10.254.254.254" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
+RUN apk add bash htop nmap
 
-RUN echo "apt-get install bash-builtins bash-completion"
+#Clean UP
+RUN rm -Rf /usr/src/pecl-memcache /usr/src/php-profiler-extension
 
-RUN echo 'alias console="php /var/www/bin/console"' >> ~/.bashrc
+RUN apk del --purge g++ m4 autoconf gcc bison
 
-WORKDIR /var/www
+RUN apk add supervisor dcron
+
+WORKDIR /var/www 
 
 CMD /usr/bin/supervisord -n
