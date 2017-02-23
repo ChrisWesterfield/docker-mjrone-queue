@@ -1,6 +1,6 @@
 FROM php:7.1.1-cli
 
-MAINTAINER Maxence POUTORD <maxence.poutord@gmail.com>
+MAINTAINER Christopher Westerfield <chris@mjr.one>
 
 RUN apt-get update && apt-get install -y \
     git \
