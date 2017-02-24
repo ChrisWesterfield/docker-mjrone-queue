@@ -1,4 +1,4 @@
-FROM php:7.1.1-cli
+FROM php:7.1.2-cli
 
 MAINTAINER Christopher Westerfield <chris@mjr.one>
 
