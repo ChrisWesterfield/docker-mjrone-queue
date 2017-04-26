@@ -1,4 +1,4 @@
-FROM php:7.1.3-alpine
+FROM php:7.1.4-alpine
 MAINTAINER Christopher Westerfield <chris@mjr.one>
 
 RUN apk update 
@@ -34,17 +34,6 @@ RUN docker-php-ext-install pcntl
 RUN apk add autoconf make m4 bison g++
 RUN pecl install redis-3.1.1
 RUN docker-php-ext-enable redis
-
-# Install Memcache and Configure
-RUN	cd /usr/src && \
-	git clone https://github.com/websupport-sk/pecl-memcache.git && \
-	cd /usr/src/pecl-memcache && \
-	git checkout php7 && \
-	phpize && \
-	./configure --enable-memcache  --with-php-config=/usr/local/bin/php-config && \
-	make && \
-	make install 
-RUN docker-php-ext-enable memcache
 
 #additional packages
 RUN apk add libxml2-dev  curl-dev libmcrypt-dev libxslt-dev openldap-dev imap-dev coreutils freetype-dev libjpeg-turbo-dev libltdl libpng-dev
@@ -85,7 +74,7 @@ RUN echo "tideways.auto_start=0" >> /usr/local/etc/php/conf.d/docker-php-ext-tid
 
 # Install OpCache and Configure
 RUN docker-php-ext-install opcache
-RUN echo "opcache.memory_consumption = 512" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
+RUN echo "opcache.memory_consumption = 256" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 RUN echo "opcache.max_accelerated_files = 30000" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 RUN echo "opcache.enable_cli = On" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 RUN echo "opcache.interned_strings_buffer=16"  >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
