@@ -4,7 +4,7 @@ MAINTAINER Christopher Westerfield <chris@mjr.one>
 RUN apk update 
 RUN apk upgrade
 
-RUN apk add git nano unzip
+RUN apk add git nano unzip curl
 
 RUN apk add zlib-dev libmemcached-dev
 
@@ -101,6 +101,14 @@ RUN echo "xdebug.profiler_enable = 0" >> /usr/local/etc/php/conf.d/docker-php-ex
 RUN echo "xdebug.remote_host = 10.254.254.254" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 RUN apk add bash htop nmap
+
+#Blackfire
+RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
+    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
+    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
+    && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
+    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini
+ 
 
 #Clean UP
 RUN rm -Rf /usr/src/pecl-memcache /usr/src/php-profiler-extension
