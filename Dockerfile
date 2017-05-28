@@ -58,20 +58,6 @@ RUN docker-php-ext-install iconv
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
 RUN docker-php-ext-install gd
 
-
-# Install Tideways and Configure
-RUN cd /usr/src && \
-	git clone https://github.com/tideways/php-profiler-extension.git && \
-	cd php-profiler-extension && \
-	/usr/local/bin/phpize && \
-	./configure  CFLAGS="-O2 -g" --enable-tideways  --enable-shared  --with-php-config=/usr/local/bin/php-config && \
-	make -j `cat /proc/cpuinfo | grep processor | wc -l` && \
-	make install
-RUN docker-php-ext-enable tideways
-RUN echo "tideways.api_key=set your key" >> /usr/local/etc/php/conf.d/docker-php-ext-tideways.ini
-RUN echo "tideways.auto_prepend_library=0" >> /usr/local/etc/php/conf.d/docker-php-ext-tideways.ini
-RUN echo "tideways.auto_start=0" >> /usr/local/etc/php/conf.d/docker-php-ext-tideways.ini
-
 # Install OpCache and Configure
 RUN docker-php-ext-install opcache
 RUN echo "opcache.memory_consumption = 256" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
