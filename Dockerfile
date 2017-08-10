@@ -1,4 +1,4 @@
-FROM php:7.1.4-cli
+FROM php:7.1.8-cli
 
 MAINTAINER Christopher Westerfield <chris@mjr.one>
 
@@ -91,5 +91,7 @@ RUN echo "apt-get install bash-builtins bash-completion"
 RUN echo 'alias console="php /var/www/bin/console"' >> ~/.bashrc
 
 WORKDIR /var/www
+
+RUN apt-get install tesseract-ocr tesseract-ocr-eng tesseract-ocr-deu tesseract-ocr-deu-frak -y
 
 CMD /usr/bin/supervisord -n
