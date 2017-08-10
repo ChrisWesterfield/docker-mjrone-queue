@@ -1,4 +1,4 @@
-FROM php:7.1.7-alpine
+FROM php:7.1.8-alpine
 MAINTAINER Christopher Westerfield <chris@mjr.one>
 
 RUN apk update 
@@ -102,6 +102,8 @@ RUN rm -Rf /usr/src/pecl-memcache /usr/src/php-profiler-extension
 RUN apk del --purge g++ m4 autoconf gcc bison
 
 RUN apk add supervisor dcron
+
+RUN apk add tesseract-ocr
 
 WORKDIR /var/www 
 
