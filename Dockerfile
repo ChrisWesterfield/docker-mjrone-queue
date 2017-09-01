@@ -53,8 +53,6 @@ RUN apt-get update && apt-get install -y \
     mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so &&\
     printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini && \
     rm /etc/munin/munin-node.conf && \
-    chmod +x /usr/share/munin/plugins/proccesses.py && \
-    ln -s /usr/share/munin/plugins/proccesses.py /etc/munin/plugins/supervisor && \
     rm /etc/munin/plugins/df /etc/munin/plugins/df_inode /etc/munin/plugins/diskstats /etc/munin/plugins/exim_mailqueue /etc/munin/plugins/fw_packets /etc/munin/plugins/interrupts /etc/munin/plugins/if* /etc/munin/plugins/irqstats /etc/munin/plugins/munin_stats  /etc/munin/plugins/swap /etc/munin/plugins/users /etc/munin/plugins/vmstat && \
     echo "[supervisord_process]" > /etc/munin/plugin-conf.d/supervisord_process && \
     echo "          user root" >> /etc/munin/plugin-conf.d/supervisord_process && \
@@ -67,7 +65,8 @@ RUN apt-get update && apt-get install -y \
 COPY munin-node.conf /etc/munin/munin-node.conf
 COPY processes.py /usr/share/munin/plugins/proccesses.py
 COPY suprvisord.conf /etc/supervisor/supervisord.conf
-
+RUN chmod +x /usr/share/munin/plugins/proccesses.py && \
+    ln -s /usr/share/munin/plugins/proccesses.py /etc/munin/plugins/supervisor
 WORKDIR /var/www
 USER www-data
 VOLUME ["/var/www", "/var/log", "/etc/supervisor/conf.d/", "/usr/local/etc/php-fpm.d/"]
