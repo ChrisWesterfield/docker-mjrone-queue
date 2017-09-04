@@ -98,5 +98,5 @@ RUN apt-get remove git cpp cpp-4.9 openssh-server openssh-client m4 patch exim* 
 WORKDIR /var/www
 USER www-data
 VOLUME ["/var/www", "/var/log", "/etc/supervisor/conf.d/", "/usr/local/etc/php-fpm.d/"]
-CMD "/usr/bin/supervisord -n"
+CMD ["/usr/bin/supervisord", " -n"]
 
