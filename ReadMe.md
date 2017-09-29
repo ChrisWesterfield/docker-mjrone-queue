@@ -16,7 +16,6 @@ also includes the following apt installed packages:
 
 1. supervisor
 2. teseract (for OCR)
-3. Monit
 4. graphviz
 
 #NOTES:
@@ -30,20 +29,4 @@ example config for cron
 command = cron -f -L 15
 autostart=true
 autorestart=true
-```
-
-Munin Config
-
-```
-[program:munin]
-command=/usr/bin/sudo /usr/sbin/munin-node --config /etc/munin/munin-node.conf
-autostart=true
-autorestart=false
-priority=5
-stdout_events_enabled=true
-stderr_events_enabled=true
-stdout_logfile=/dev/stdout
-stdout_logfile_maxbytes=0
-stderr_logfile=/dev/stderr
-stderr_logfile_maxbytes=0
 ```
