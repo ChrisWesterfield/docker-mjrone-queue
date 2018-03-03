@@ -1,4 +1,4 @@
-PHP 7.2.0 RC3
+PHP 7.1.4
 Slim
 
 **default user**: www-data
