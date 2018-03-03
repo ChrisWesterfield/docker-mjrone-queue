@@ -1,4 +1,4 @@
-PHP 7.2.0 RC3
+PHP 7.2.2
 Slim
 
 **default user**: www-data
@@ -7,11 +7,27 @@ includes the following extensions:
 
 - pdo
 - pdo-mysql
+- pdo-pgsql
 - pcntl
 - redis
 - opcache
 - xdebug
 - blackfire
+- pdo_pgsql
+- xhprof/tideways
+- gd
+- ftp
+- fileinfo
+- imap
+- json
+- mbstring
+- ldap
+- phar
+- tidy
+- sockets
+- xmlrpc
+- xsl
+- mongodb
 
 also includes the following apt installed packages:
 
